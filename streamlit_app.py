@@ -287,7 +287,7 @@ def main():
     col1, col2 = st.columns([1, 6])
     
     with col1:
-        st.image("https://content.fieldsmanager.com/System.png", width=80)
+        st.image("https://content.fieldsmanager.com/System.png", width=130)
     
     with col2:
         st.title("🏏 Field Manager's Cricket Intelligence Hub")
