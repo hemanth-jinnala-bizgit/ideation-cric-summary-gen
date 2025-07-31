@@ -29,9 +29,9 @@ extract_mega_highlights:
 
 # FINAL SUPER TASK - Everything combined with enhanced format
 generate_ultimate_match_digest:
-  description: "First create your complete match digest optimized for 8-10 minute reading time following all the structured sections below, then copy the ENTIRE mega_analyst output word-for-word at the end. Keep all 40+ sections but make them concise. FORBIDDEN PHRASES: '[Full output]', '[Complete analysis]', '[As previously presented]', '[FULL DIGEST CONTINUES]'. WRITE EVERYTHING OUT EXPLICITLY. NEVER USE BRACKETS TO REFERENCE CONTENT. COPY EVERY SINGLE WORD FROM PREVIOUS OUTPUTS. CRITICAL COMMANDS: 1) START WITH COMPLETE MATCH DIGEST 2) THEN ADD ALL MEGA_ANALYST CONTENT 3) REPRODUCE ALL PREVIOUS CONTENT COMPLETELY 4) NEVER USE PLACEHOLDER TEXT 5) WRITE EVERYTHING OUT IN FULL 6) NO SHORTCUTS OR REFERENCES 7) COMPLETE EVERYTHING IN ONE RESPONSE."
+  description: "YOU MUST PRODUCE TWO COMPLETE SECTIONS: 1) First create your complete match digest optimized for 8-10 minute reading time following all structured sections below, 2) Then copy the ENTIRE mega_analyst output word-for-word from extract_mega_highlights task including ALL highlights, batting performances, bowling performances, partnerships, statistical facts, historical context, and psychological moments. FORBIDDEN PHRASES: '[Full output]', '[Complete analysis]', '[As previously presented]', '[FULL DIGEST CONTINUES]'. WRITE EVERYTHING OUT EXPLICITLY. NEVER USE BRACKETS TO REFERENCE CONTENT. CRITICAL COMMANDS: 1) START WITH COMPLETE MATCH DIGEST 2) ADD CLEAR SEPARATOR '---MEGA ANALYST OUTPUT---' 3) THEN COPY ALL MEGA_ANALYST CONTENT WORD-FOR-WORD 4) REPRODUCE ALL PREVIOUS CONTENT COMPLETELY 5) NEVER USE PLACEHOLDER TEXT 6) NO SHORTCUTS OR REFERENCES."
   expected_output: >
-    Start with complete match digest following these EXACT word count rules, then copy complete mega_analyst output word-for-word at the end:
+    YOU MUST INCLUDE BOTH SECTIONS - Start with complete match digest following these EXACT word count rules, then add separator '---MEGA ANALYST OUTPUT---' and copy ALL mega_analyst content word-for-word:
     
     **30-WORD GENZ MATCH SUMMARY** (Use GenZ slang like "no cap", "lowkey", "fire", "slaps", "periodt", etc.)
     

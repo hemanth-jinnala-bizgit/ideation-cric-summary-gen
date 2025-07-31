@@ -279,27 +279,31 @@ st.set_page_config(
     page_title="Field Manager's Cricket Intelligence Hub",
     page_icon="🏏",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 def main():
-    # Header with logo and title
-    col1, col2 = st.columns([1, 6])
+    # Initialize session state to persist results
+    if 'analysis_result' not in st.session_state:
+        st.session_state.analysis_result = None
+    if 'last_match_id' not in st.session_state:
+        st.session_state.last_match_id = None
+
+    # Header with logo and title - reduced gap
+    col1, col2 = st.columns([1, 8])
     
     with col1:
-        st.image("https://content.fieldsmanager.com/System.png", width=130)
+        st.image("https://content.fieldsmanager.com/System.png", width=100)
     
     with col2:
         st.title("🏏 Field Manager's Cricket Intelligence Hub")
         st.markdown("**Powered by AI Agents • Comprehensive Match Analysis • Real-time Insights**")
     
-    st.markdown("---")
-    
     # Add custom CSS for better styling
     st.markdown("""
     <style>
     .stApp {
-        padding-top: 2rem;
+        padding-top: 1rem;
     }
     .main-header {
         font-size: 3rem !important;
@@ -326,48 +330,66 @@ def main():
         border-radius: 0.5rem;
         margin: 1rem 0;
     }
+    .input-section {
+        background-color: #f0f2f6;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin: 2rem 0;
+    }
+    /* Hide sidebar */
+    .css-1d391kg {display: none;}
     </style>
     """, unsafe_allow_html=True)
     
-    # Sidebar for inputs
-    with st.sidebar:
-        st.header("⚙️ Match Analysis Setup")
+    # Main page inputs section
+    st.markdown("---")
+    
+    # Input section with better styling
+    with st.container():
+        st.markdown('<div class="input-section">', unsafe_allow_html=True)
         
-        # Important notice about Cricbuzz
-        st.warning("⚠️ **IMPORTANT**: Use only Match IDs from **cricbuzz.com**")
-        st.markdown("📌 **How to get Match ID from Cricbuzz:**")
-        st.markdown("""
-        1. Go to [cricbuzz.com](https://cricbuzz.com)
-        2. Select any live or completed match
-        3. Copy the **numbers** from the URL
+        col1, col2 = st.columns([2, 1])
         
-        **Example:** 
-        - URL: `cricbuzz.com/live-cricket-scores/105778/match-name`
-        - Match ID: `105778`
-        """)
+        with col1:
+            st.markdown("### ⚙️ Match Analysis Setup")
+            
+            # Important notice about Cricbuzz
+            st.warning("⚠️ **IMPORTANT**: Use only Match IDs from **cricbuzz.com**")
+            st.markdown("📌 **How to get Match ID from Cricbuzz:**")
+            st.markdown("""
+            1. Go to [cricbuzz.com](https://cricbuzz.com)
+            2. Select any live or completed match
+            3. Copy the **numbers** from the URL
+            
+            **Example:** 
+            - URL: `cricbuzz.com/live-cricket-scores/105778/match-name`
+            - Match ID: `105778`
+            """)
+            
+            # Match ID input
+            match_id = st.text_input(
+                "🏏 Cricbuzz Match ID",
+                value="105778",
+                help="Enter the Match ID from cricbuzz.com URL",
+                placeholder="e.g., 105778"
+            )
+            
+            # Analysis button
+            analyze_button = st.button("🚀 Generate Intelligence Report", type="primary", use_container_width=True)
         
-        # Match ID input
-        match_id = st.text_input(
-            "🏏 Cricbuzz Match ID",
-            value="105778",
-            help="Enter the Match ID from cricbuzz.com URL",
-            placeholder="e.g., 105778"
-        )
+        with col2:
+            st.markdown("### 🤖 AI Analysis Engine")
+            st.markdown(
+                """
+                **Field Manager's Intelligence System:**
+                - 📊 **Data Analyst**: Extracts match statistics
+                - 🎯 **Performance Analyst**: Identifies key moments  
+                - 📝 **Content Strategist**: Creates engaging insights
+                - 🏆 **Master Analyst**: Compiles comprehensive reports
+                """
+            )
         
-        # Analysis button
-        analyze_button = st.button("🚀 Generate Intelligence Report", type="primary")
-        
-        st.markdown("---")
-        st.markdown("### 🤖 AI Analysis Engine")
-        st.markdown(
-            """
-            **Field Manager's Intelligence System:**
-            - 📊 **Data Analyst**: Extracts match statistics
-            - 🎯 **Performance Analyst**: Identifies key moments  
-            - 📝 **Content Strategist**: Creates engaging insights
-            - 🏆 **Master Analyst**: Compiles comprehensive reports
-            """
-        )
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Main content area - full width
     if analyze_button and match_id:
@@ -375,13 +397,18 @@ def main():
             st.error("Please enter a valid Match ID")
             return
         
+        # Clear previous results if new match ID
+        if st.session_state.last_match_id != match_id:
+            st.session_state.analysis_result = None
+            st.session_state.last_match_id = match_id
+        
         # Show loading spinner with Field Manager branding
         with st.spinner("🤖 Field Manager's AI Agents analyzing match data..."):
             try:
                 # Run the CrewAI analysis
                 result = run(match_id)
                 
-                # Display results
+                # Store results in session state
                 if result:
                     # Get the result text
                     if hasattr(result, 'raw'):
@@ -389,16 +416,7 @@ def main():
                     else:
                         result_text = str(result)
                     
-                    # Format and display the cricket analysis
-                    format_cricket_analysis(result_text)
-                    
-                    # Download button for results
-                    st.download_button(
-                        label="📥 Download Intelligence Report",
-                        data=result_text,
-                        file_name=f"field_managers_cricket_analysis_{match_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-                        mime="text/plain"
-                    )
+                    st.session_state.analysis_result = result_text
                 
             except Exception as e:
                 st.error(f"An error occurred during analysis: {str(e)}")
@@ -408,9 +426,24 @@ def main():
                 
                 logger.error(f"Analysis failed for match {match_id}: {str(e)}")
     
-    elif not match_id:
-        st.info("👈 Please enter a **Cricbuzz Match ID** in the sidebar to start analysis")
+    # Display stored results if available
+    if st.session_state.analysis_result:
+        st.markdown("---")
+        st.markdown("## 📊 Analysis Results")
         
+        # Format and display the cricket analysis
+        format_cricket_analysis(st.session_state.analysis_result)
+        
+        # Download button for results
+        st.download_button(
+            label="📥 Download Intelligence Report",
+            data=st.session_state.analysis_result,
+            file_name=f"field_managers_cricket_analysis_{st.session_state.last_match_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain"
+        )
+    
+    elif not st.session_state.analysis_result:
+        st.markdown("---")
         # Add instructions in main area when no analysis is running
         st.markdown("### 🎯 Welcome to Field Manager's Cricket Intelligence Hub")
         st.markdown("""
@@ -424,11 +457,8 @@ def main():
         - 📈 **Statistical Deep Dive** - Fascinating facts and records
         - 🎭 **Match Narrative** - Complete story of how the match unfolded
         
-        **🚀 Simply enter a Cricbuzz Match ID and click 'Generate Intelligence Report'!**
+        **🚀 Simply enter a Cricbuzz Match ID above and click 'Generate Intelligence Report'!**
         """)
-        
-    else:
-        st.info("👆 Click the 'Generate Intelligence Report' button to begin analysis")
 
 if __name__ == "__main__":
     main()
