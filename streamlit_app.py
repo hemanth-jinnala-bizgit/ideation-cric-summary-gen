@@ -276,14 +276,23 @@ def process_statistical_facts(lines):
 
 # Configure Streamlit page
 st.set_page_config(
-    page_title="Cricket Match Analysis",
+    page_title="Field Manager's Cricket Intelligence Hub",
     page_icon="🏏",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 def main():
-    st.title("🏏 Cricket Match Analysis with CrewAI")
+    # Header with logo and title
+    col1, col2 = st.columns([1, 6])
+    
+    with col1:
+        st.image("https://content.fieldsmanager.com/System.png", width=80)
+    
+    with col2:
+        st.title("🏏 Field Manager's Cricket Intelligence Hub")
+        st.markdown("**Powered by AI Agents • Comprehensive Match Analysis • Real-time Insights**")
+    
     st.markdown("---")
     
     # Add custom CSS for better styling
@@ -322,27 +331,41 @@ def main():
     
     # Sidebar for inputs
     with st.sidebar:
-        st.header("⚙️ Configuration")
+        st.header("⚙️ Match Analysis Setup")
+        
+        # Important notice about Cricbuzz
+        st.warning("⚠️ **IMPORTANT**: Use only Match IDs from **cricbuzz.com**")
+        st.markdown("📌 **How to get Match ID from Cricbuzz:**")
+        st.markdown("""
+        1. Go to [cricbuzz.com](https://cricbuzz.com)
+        2. Select any live or completed match
+        3. Copy the **numbers** from the URL
+        
+        **Example:** 
+        - URL: `cricbuzz.com/live-cricket-scores/105778/match-name`
+        - Match ID: `105778`
+        """)
         
         # Match ID input
         match_id = st.text_input(
-            "Match ID",
+            "🏏 Cricbuzz Match ID",
             value="105778",
-            help="Enter the cricket match ID you want to analyze"
+            help="Enter the Match ID from cricbuzz.com URL",
+            placeholder="e.g., 105778"
         )
         
         # Analysis button
-        analyze_button = st.button("🚀 Start Analysis", type="primary")
+        analyze_button = st.button("🚀 Generate Intelligence Report", type="primary")
         
         st.markdown("---")
-        st.markdown("### ℹ️ About")
+        st.markdown("### 🤖 AI Analysis Engine")
         st.markdown(
             """
-            This app uses CrewAI to analyze cricket matches with:
-            - **Summary Writer**: Gets match results
-            - **Mega Analyst**: Extracts highlights  
-            - **Viral Master**: Creates engaging content
-            - **Ultimate Digest Master**: Compiles final report
+            **Field Manager's Intelligence System:**
+            - 📊 **Data Analyst**: Extracts match statistics
+            - 🎯 **Performance Analyst**: Identifies key moments  
+            - 📝 **Content Strategist**: Creates engaging insights
+            - 🏆 **Master Analyst**: Compiles comprehensive reports
             """
         )
     
@@ -352,8 +375,8 @@ def main():
             st.error("Please enter a valid Match ID")
             return
         
-        # Show loading spinner
-        with st.spinner("🔄 Analyzing match data..."):
+        # Show loading spinner with Field Manager branding
+        with st.spinner("🤖 Field Manager's AI Agents analyzing match data..."):
             try:
                 # Run the CrewAI analysis
                 result = run(match_id)
@@ -371,9 +394,9 @@ def main():
                     
                     # Download button for results
                     st.download_button(
-                        label="📥 Download Report",
+                        label="📥 Download Intelligence Report",
                         data=result_text,
-                        file_name=f"cricket_analysis_{match_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                        file_name=f"field_managers_cricket_analysis_{match_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
                         mime="text/plain"
                     )
                 
@@ -386,9 +409,26 @@ def main():
                 logger.error(f"Analysis failed for match {match_id}: {str(e)}")
     
     elif not match_id:
-        st.info("👈 Please enter a Match ID in the sidebar to start analysis")
+        st.info("👈 Please enter a **Cricbuzz Match ID** in the sidebar to start analysis")
+        
+        # Add instructions in main area when no analysis is running
+        st.markdown("### 🎯 Welcome to Field Manager's Cricket Intelligence Hub")
+        st.markdown("""
+        Get **comprehensive AI-powered cricket match analysis** in seconds!
+        
+        **📋 What you'll get:**
+        - 🏆 **Ultimate Match Digest** - Complete match overview with key statistics
+        - ⭐ **Top Highlights** - Most important moments and performances  
+        - 📊 **Performance Analysis** - Detailed batting, bowling, and fielding insights
+        - 🤝 **Partnership Analysis** - Critical partnerships that shaped the match
+        - 📈 **Statistical Deep Dive** - Fascinating facts and records
+        - 🎭 **Match Narrative** - Complete story of how the match unfolded
+        
+        **🚀 Simply enter a Cricbuzz Match ID and click 'Generate Intelligence Report'!**
+        """)
+        
     else:
-        st.info("👆 Click the 'Start Analysis' button to begin")
+        st.info("👆 Click the 'Generate Intelligence Report' button to begin analysis")
 
 if __name__ == "__main__":
     main()
