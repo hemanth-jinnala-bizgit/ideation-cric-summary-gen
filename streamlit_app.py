@@ -6,6 +6,15 @@ import logging
 from datetime import datetime
 import traceback
 
+# SQLite fix for ChromaDB on Streamlit Cloud - MUST BE FIRST
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    # Try environment variable approach
+    os.environ['CHROMA_DB_IMPL'] = 'duckdb'
+    os.environ['ANONYMIZED_TELEMETRY'] = 'False'
+
 # Add the src directory to Python path
 sys.path.append(str(Path(__file__).parent / "src"))
 
