@@ -1,5 +1,14 @@
 import os
+import sys
 from dotenv import load_dotenv
+
+# SQLite fix for ChromaDB on Streamlit Cloud
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from crewai import Agent, Crew, Task, Process, LLM
 from crewai.project import CrewBase, agent, task, crew
 
