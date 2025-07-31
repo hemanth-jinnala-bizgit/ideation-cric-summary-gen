@@ -276,7 +276,7 @@ def process_statistical_facts(lines):
 
 # Configure Streamlit page
 st.set_page_config(
-    page_title="Field Manager's Cricket Intelligence Hub",
+    page_title="Field's Manager Cricket Intelligence Hub",
     page_icon="🏏",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -331,16 +331,13 @@ def main():
         margin: 1rem 0;
     }
     .input-section {
-        padding: 1rem 0;
-        margin: 1rem 0;
+        padding: 0;
+        margin: 0;
     }
     /* Hide sidebar */
     .css-1d391kg {display: none;}
     </style>
     """, unsafe_allow_html=True)
-    
-    # Main page inputs section
-    st.markdown("---")
     
     # Input section with better styling
     with st.container():
@@ -401,7 +398,7 @@ def main():
             st.session_state.last_match_id = match_id
         
         # Show loading spinner with Field Manager branding
-        with st.spinner("🤖 Field Manager's AI Agents analyzing match data please wait it will 2-3 minutes..."):
+        with st.spinner("🤖 Field Manager's AI Agents analyzing match data please wait it will take 2-3 minutes..."):
             try:
                 # Run the CrewAI analysis
                 result = run(match_id)
