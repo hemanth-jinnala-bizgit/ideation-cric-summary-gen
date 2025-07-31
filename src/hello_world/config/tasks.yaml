@@ -15,23 +15,23 @@ extract_mega_highlights:
   expected_output: >
     A focused compilation including:
     1. 30-word GenZ match summary at the very beginning
-    2. Top 4 highlights (each description must exceed 12 words)
-    3. Top 3 batting performances (each description must exceed 12 words)
-    4. Top 3 bowling performances (each description must exceed 12 words)
-    5. Key partnerships & fielding highlights (each description must exceed 12 words)
-    6. 6 fascinating statistical facts (each description must exceed 12 words)
-    7. Historical context (exactly 3 paragraphs, each exactly 20 words)
+    2. Top 4 highlights (each description must not exceed 12 words)
+    3. Top 3 batting performances (each description must not  exceed 12 words)
+    4. Top 3 bowling performances (each description must not  exceed 12 words)
+    5. Key partnerships & fielding highlights (each description must not  exceed 12 words)
+    6. 6 fascinating statistical facts (each description must not  exceed 12 words)
+    7. Historical context (exactly 2 paragraphs, each exactly 12 words)
     8. Psychological moments (each description maximum 12 words)
-    9. Top 3 match-defining moments (each description maximum 20 words)
+    9. Top 3 match-defining moments (each description maximum 15 words)
   agent: mega_analyst
   context: [generate_main_summary]
 
 
 # FINAL SUPER TASK - Everything combined with enhanced format
 generate_ultimate_match_digest:
-  description: "Copy the ENTIRE mega_analyst output word-for-word, then add your complete digest optimized for 8-10 minute reading time. Keep all 40+ sections but make them concise. FORBIDDEN PHRASES: '[Full output]', '[Complete analysis]', '[As previously presented]', '[FULL DIGEST CONTINUES]'. WRITE EVERYTHING OUT EXPLICITLY. NEVER USE BRACKETS TO REFERENCE CONTENT. COPY EVERY SINGLE WORD FROM PREVIOUS OUTPUTS. CRITICAL COMMANDS: 1) REPRODUCE ALL PREVIOUS CONTENT COMPLETELY 2) NEVER USE PLACEHOLDER TEXT 3) WRITE EVERYTHING OUT IN FULL 4) NO SHORTCUTS OR REFERENCES 5) COMPLETE EVERYTHING IN ONE RESPONSE 6) OPTIMIZE FOR 8-10 MINUTE READ TIME."
+  description: "First create your complete match digest optimized for 8-10 minute reading time following all the structured sections below, then copy the ENTIRE mega_analyst output word-for-word at the end. Keep all 40+ sections but make them concise. FORBIDDEN PHRASES: '[Full output]', '[Complete analysis]', '[As previously presented]', '[FULL DIGEST CONTINUES]'. WRITE EVERYTHING OUT EXPLICITLY. NEVER USE BRACKETS TO REFERENCE CONTENT. COPY EVERY SINGLE WORD FROM PREVIOUS OUTPUTS. CRITICAL COMMANDS: 1) START WITH COMPLETE MATCH DIGEST 2) THEN ADD ALL MEGA_ANALYST CONTENT 3) REPRODUCE ALL PREVIOUS CONTENT COMPLETELY 4) NEVER USE PLACEHOLDER TEXT 5) WRITE EVERYTHING OUT IN FULL 6) NO SHORTCUTS OR REFERENCES 7) COMPLETE EVERYTHING IN ONE RESPONSE."
   expected_output: >
-    Copy complete mega_analyst output word-for-word, then add digest following these EXACT word count rules:
+    Start with complete match digest following these EXACT word count rules, then copy complete mega_analyst output word-for-word at the end:
     
     **30-WORD GENZ MATCH SUMMARY** (Use GenZ slang like "no cap", "lowkey", "fire", "slaps", "periodt", etc.)
     
@@ -47,19 +47,19 @@ generate_ultimate_match_digest:
     - **Crowd:** [Atmosphere description]
 
     **🔥 POETIC MATCH NARRATIVE**
-    (6 lines of pure poetry that capture the match essence)
+    (3 lines of pure poetry that capture the match essence 7 words each)
 
     **🧠 TACTICAL BREAKDOWN & TURNING POINTS**
-    (1-2 concise paragraphs of key tactical analysis)
+    (1 concise paragraphs of key tactical analysis and 1 paragraph on turning points each 14 words)
 
 
     **🤝 PARTNERSHIPS THAT CHANGED EVERYTHING**
-    - [Key partnership 1] - [Description must exceed 12 words with detailed impact analysis]
-    - [Key partnership 2] - [Description must exceed 12 words with detailed impact analysis]
+    - [Key partnership 1] - [Description must not  exceed 12 words with detailed impact analysis]
+    - [Key partnership 2] - [Description must not exceed 12 words with detailed impact analysis]
 
     **🎯 FIELDING HIGHLIGHTS & GAME CHANGERS**
-    - [Fielding moment 1] - [Description must exceed 12 words with detailed impact analysis]
-    - [Fielding moment 2] - [Description must exceed 12 words with detailed impact analysis]
+    - [Fielding moment 1] - [Description must not  exceed 12 words with detailed impact analysis]
+    - [Fielding moment 2] - [Description must not  exceed 12 words with detailed impact analysis]
 
     **🎯 KEY MATCH MOMENTS**
     - [Most crucial turning point]
@@ -72,12 +72,12 @@ generate_ultimate_match_digest:
     - [Player 3]: [Key contribution]
 
     **📊 STATISTICAL DEEP DIVE (6 FASCINATING FACTS)**
-    - [Stat 1] - [Description must exceed 12 words with detailed significance analysis]
-    - [Stat 2] - [Description must exceed 12 words with detailed significance analysis]
-    - [Stat 3] - [Description must exceed 12 words with detailed significance analysis]
-    - [Stat 4] - [Description must exceed 12 words with detailed significance analysis]
-    - [Stat 5] - [Description must exceed 12 words with detailed significance analysis]
-    - [Stat 6] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 1] - [Description must not exceed 12 words with detailed significance analysis]
+    - [Stat 2] - [Description must not exceed 12 words with detailed significance analysis]
+    - [Stat 3] - [Description must not exceed 12 words with detailed significance analysis]
+    - [Stat 4] - [Description must not exceed 12 words with detailed significance analysis]
+    - [Stat 5] - [Description must not exceed 12 words with detailed significance analysis]
+    - [Stat 6] - [Description must not exceed 12 words with detailed significance analysis]
 
     **🔄 MOMENTUM SHIFTS & TURNING POINTS**
     - [Early phase]: [Brief analysis]
@@ -100,11 +100,11 @@ generate_ultimate_match_digest:
     - [Game-changing brilliance] - [Maximum 20 words describing significance and impact on match outcome]
 
     **📚 HISTORICAL CONTEXT & SIGNIFICANCE**
-    [Paragraph 1: Exactly 20 words connecting this match to cricket history, records, and rivalries with specific context]
+    [Paragraph 1: Exactly 12 words connecting this match to cricket history, records, and rivalries with specific context]
     
-    [Paragraph 2: Exactly 20 words about broader significance in the sport and impact on both teams' futures]
+    [Paragraph 2: Exactly 12 words about broader significance in the sport and impact on both teams' futures]
     
-    [Paragraph 3: Exactly 20 words analyzing how this match fits into series context and tournament implications]
+    [Paragraph 3: Exactly 12 words analyzing how this match fits into series context and tournament implications]
 
     **🎙️ COMMENTARY HIGHLIGHTS**
     - [Memorable quote #1 with context of when it was said]
