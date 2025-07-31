@@ -293,7 +293,7 @@ def main():
     col1, col2 = st.columns([1, 8])
     
     with col1:
-        st.image("https://content.fieldsmanager.com/System.png", width=100)
+        st.image("https://content.fieldsmanager.com/System.png", width=125)
     
     with col2:
         st.title("🏏 Field Manager's Cricket Intelligence Hub")
@@ -331,10 +331,8 @@ def main():
         margin: 1rem 0;
     }
     .input-section {
-        background-color: #f0f2f6;
-        padding: 2rem;
-        border-radius: 1rem;
-        margin: 2rem 0;
+        padding: 1rem 0;
+        margin: 1rem 0;
     }
     /* Hide sidebar */
     .css-1d391kg {display: none;}
@@ -368,7 +366,7 @@ def main():
             
             # Match ID input
             match_id = st.text_input(
-                "🏏 Cricbuzz Match ID",
+                "🏏 Cricbuzz Match ID (Enter the MatchID Here)",
                 value="105778",
                 help="Enter the Match ID from cricbuzz.com URL",
                 placeholder="e.g., 105778"
@@ -403,7 +401,7 @@ def main():
             st.session_state.last_match_id = match_id
         
         # Show loading spinner with Field Manager branding
-        with st.spinner("🤖 Field Manager's AI Agents analyzing match data..."):
+        with st.spinner("🤖 Field Manager's AI Agents analyzing match data please wait it will 2-3 minutes..."):
             try:
                 # Run the CrewAI analysis
                 result = run(match_id)
@@ -442,23 +440,6 @@ def main():
             mime="text/plain"
         )
     
-    elif not st.session_state.analysis_result:
-        st.markdown("---")
-        # Add instructions in main area when no analysis is running
-        st.markdown("### 🎯 Welcome to Field Manager's Cricket Intelligence Hub")
-        st.markdown("""
-        Get **comprehensive AI-powered cricket match analysis** in seconds!
-        
-        **📋 What you'll get:**
-        - 🏆 **Ultimate Match Digest** - Complete match overview with key statistics
-        - ⭐ **Top Highlights** - Most important moments and performances  
-        - 📊 **Performance Analysis** - Detailed batting, bowling, and fielding insights
-        - 🤝 **Partnership Analysis** - Critical partnerships that shaped the match
-        - 📈 **Statistical Deep Dive** - Fascinating facts and records
-        - 🎭 **Match Narrative** - Complete story of how the match unfolded
-        
-        **🚀 Simply enter a Cricbuzz Match ID above and click 'Generate Intelligence Report'!**
-        """)
 
 if __name__ == "__main__":
     main()
