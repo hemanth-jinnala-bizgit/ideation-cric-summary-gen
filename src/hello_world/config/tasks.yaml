@@ -1,0 +1,134 @@
+get_final_match_result:
+  description: "Using match ID {match_id}, use the Match Final Summary Tool to get the definitive, official match result and status."
+  expected_output: "A clear text block with the official match result, like 'Match drawn'."
+  agent: summary_writer
+  
+generate_main_summary:
+  description: "Based on the verified result for **match ID {match_id}**, write a concise news-style match summary. Use the cricket API tools with **this ID** to gather supporting details."
+  expected_output: "A 2 paragraph sports article with a headline that accurately reflects the verified match result."
+  agent: summary_writer
+  context: [get_final_match_result]
+
+# MEGA TASK - All highlights, stats, and fun facts in ONE
+extract_mega_highlights:
+  description: "For **match ID {match_id}**, create a compilation with specific word count requirements for GenZ audience."
+  expected_output: >
+    A focused compilation including:
+    1. 30-word GenZ match summary at the very beginning
+    2. Top 4 highlights (each description must exceed 12 words)
+    3. Top 3 batting performances (each description must exceed 12 words)
+    4. Top 3 bowling performances (each description must exceed 12 words)
+    5. Key partnerships & fielding highlights (each description must exceed 12 words)
+    6. 6 fascinating statistical facts (each description must exceed 12 words)
+    7. Historical context (exactly 3 paragraphs, each exactly 20 words)
+    8. Psychological moments (each description maximum 12 words)
+    9. Top 3 match-defining moments (each description maximum 20 words)
+  agent: mega_analyst
+  context: [generate_main_summary]
+
+
+# FINAL SUPER TASK - Everything combined with enhanced format
+generate_ultimate_match_digest:
+  description: "Copy the ENTIRE mega_analyst output word-for-word, then add your complete digest optimized for 8-10 minute reading time. Keep all 40+ sections but make them concise. FORBIDDEN PHRASES: '[Full output]', '[Complete analysis]', '[As previously presented]', '[FULL DIGEST CONTINUES]'. WRITE EVERYTHING OUT EXPLICITLY. NEVER USE BRACKETS TO REFERENCE CONTENT. COPY EVERY SINGLE WORD FROM PREVIOUS OUTPUTS. CRITICAL COMMANDS: 1) REPRODUCE ALL PREVIOUS CONTENT COMPLETELY 2) NEVER USE PLACEHOLDER TEXT 3) WRITE EVERYTHING OUT IN FULL 4) NO SHORTCUTS OR REFERENCES 5) COMPLETE EVERYTHING IN ONE RESPONSE 6) OPTIMIZE FOR 8-10 MINUTE READ TIME."
+  expected_output: >
+    Copy complete mega_analyst output word-for-word, then add digest following these EXACT word count rules:
+    
+    **30-WORD GENZ MATCH SUMMARY** (Use GenZ slang like "no cap", "lowkey", "fire", "slaps", "periodt", etc.)
+    
+    ## [EXPLOSIVE VIRAL HEADLINE WITH EMOJIS]
+
+    ### 🏆 ULTIMATE MATCH DIGEST: [Team A] vs [Team B] ###
+
+    **📍 MATCH OVERVIEW**
+    - **Location:** [Venue]
+    - **Result:** [Final Result with margin]
+    - **Man of the Match:** [Player Name]
+    - **Match Duration:** [Time/Overs]
+    - **Crowd:** [Atmosphere description]
+
+    **🔥 POETIC MATCH NARRATIVE**
+    (6 lines of pure poetry that capture the match essence)
+
+    **🧠 TACTICAL BREAKDOWN & TURNING POINTS**
+    (1-2 concise paragraphs of key tactical analysis)
+
+
+    **🤝 PARTNERSHIPS THAT CHANGED EVERYTHING**
+    - [Key partnership 1] - [Description must exceed 12 words with detailed impact analysis]
+    - [Key partnership 2] - [Description must exceed 12 words with detailed impact analysis]
+
+    **🎯 FIELDING HIGHLIGHTS & GAME CHANGERS**
+    - [Fielding moment 1] - [Description must exceed 12 words with detailed impact analysis]
+    - [Fielding moment 2] - [Description must exceed 12 words with detailed impact analysis]
+
+    **🎯 KEY MATCH MOMENTS**
+    - [Most crucial turning point]
+    - [Game-changing moment]
+    - [Match-defining decision]
+
+    **🏆 STANDOUT INDIVIDUAL PERFORMANCES**
+    - [Player 1]: [Brief impact analysis]
+    - [Player 2]: [Brief role description]
+    - [Player 3]: [Key contribution]
+
+    **📊 STATISTICAL DEEP DIVE (6 FASCINATING FACTS)**
+    - [Stat 1] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 2] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 3] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 4] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 5] - [Description must exceed 12 words with detailed significance analysis]
+    - [Stat 6] - [Description must exceed 12 words with detailed significance analysis]
+
+    **🔄 MOMENTUM SHIFTS & TURNING POINTS**
+    - [Early phase]: [Brief analysis]
+    - [Middle phase]: [Brief analysis]
+    - [Death overs]: [Brief analysis]
+
+    **🎭 MATCH ATMOSPHERE & DRAMA**
+    - [Crowd atmosphere briefly]
+    - [Key emotional moments]
+    - [Pressure situations]
+
+    **🧠 PSYCHOLOGICAL MOMENTS**
+    - [Psychological moment 1] - [Maximum 12 words describing mental impact]
+    - [Psychological moment 2] - [Maximum 12 words describing mental impact]
+    - [Psychological moment 3] - [Maximum 12 words describing mental impact]
+
+    **🌟 TOP 3 MATCH DEFINING MOMENTS**
+    - [Critical decision] - [Maximum 20 words describing significance and impact on match outcome]
+    - [Unexpected hero moment] - [Maximum 20 words describing significance and impact on match outcome]
+    - [Game-changing brilliance] - [Maximum 20 words describing significance and impact on match outcome]
+
+    **📚 HISTORICAL CONTEXT & SIGNIFICANCE**
+    [Paragraph 1: Exactly 20 words connecting this match to cricket history, records, and rivalries with specific context]
+    
+    [Paragraph 2: Exactly 20 words about broader significance in the sport and impact on both teams' futures]
+    
+    [Paragraph 3: Exactly 20 words analyzing how this match fits into series context and tournament implications]
+
+    **🎙️ COMMENTARY HIGHLIGHTS**
+    - [Memorable quote #1 with context of when it was said]
+    - [Memorable quote #2 with situation description]
+    - [Memorable quote #3 with emotional moment captured]
+    - [Commentary call that became iconic]
+
+    **🎯 PERFORMANCE RATINGS & ANALYSIS**
+    - Outstanding Performer: [Player] - [Brief analysis]
+    - Game Changer: [Player] - [Brief impact]
+    - Match Winner: [Player] - [Brief reason]
+
+    **😄 INCREDIBLE MATCH TRIVIA**
+    - [Fascinating stat 1]
+    - [Unusual record/achievement]
+    - [Interesting pattern]
+    - [Quirky statistic]
+
+    **🎯 WHAT THIS MATCH MEANS**
+    (1 paragraph analyzing implications for both teams)
+
+    **🏆 MATCH VERDICT & FINAL THOUGHTS**
+    (1 paragraph conclusion tying together key themes)
+
+
+  agent: ultimate_digest_master
+  context: [get_final_match_result, generate_main_summary, extract_mega_highlights]

@@ -1,0 +1,385 @@
+import streamlit as st
+import sys
+import os
+from pathlib import Path
+import logging
+from datetime import datetime
+import traceback
+
+# Add the src directory to Python path
+sys.path.append(str(Path(__file__).parent / "src"))
+
+from src.hello_world.main import run
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def format_cricket_analysis(text):
+    """Format cricket analysis output - Ultimate Match Digest first, then everything else"""
+    
+    # First, find and display the Ultimate Match Digest section
+    ultimate_digest_start = text.find("## 🚨 INDIA'S LEGENDARY OLD TRAFFORD ESCAPE")
+    if ultimate_digest_start == -1:
+        ultimate_digest_start = text.find("🚨 INDIA'S LEGENDARY OLD TRAFFORD ESCAPE")
+    
+    if ultimate_digest_start != -1:
+        # Extract and display the Ultimate Match Digest section
+        digest_content = text[ultimate_digest_start:]
+        st.markdown(digest_content)
+        st.markdown("---")  # Add separator
+    
+    # Then display everything else (before the Ultimate Match Digest)
+    if ultimate_digest_start != -1:
+        other_content = text[:ultimate_digest_start].strip()
+    else:
+        other_content = text
+    
+    if other_content:
+        # Split the remaining content into sections
+        sections = other_content.split('\n\n')
+        
+        for section in sections:
+            if not section.strip():
+                continue
+                
+            lines = section.strip().split('\n')
+            if not lines:
+                continue
+                
+            first_line = lines[0].strip()
+            
+            # Main title
+            if "INDIA'S EPIC COMEBACK" in first_line or "EPIC COMEBACK DRAWS" in first_line:
+                st.markdown(f"# {first_line}")
+                continue
+            
+            # Skip duplicate GenZ summaries and tactical breakdown
+            if ("30-WORD GENZ MATCH SUMMARY" in first_line or 
+                "TACTICAL BREAKDOWN & TURNING POINTS" in first_line or
+                "🧠 TACTICAL BREAKDOWN & TURNING POINTS" in first_line or
+                "GenZ Match Summary" in first_line):
+                continue
+            
+            # Major sections with double asterisks
+            if first_line.startswith('**') and first_line.endswith('**'):
+                section_title = first_line.strip('*')
+                st.markdown(f"### **{section_title}**")
+                
+                # Process content under the section
+                if len(lines) > 1:
+                    content_lines = lines[1:]
+                    process_section_content(content_lines, section_title)
+                continue
+            
+            # Top highlights/performances sections
+            if any(keyword in first_line for keyword in ['TOP 4 HIGHLIGHTS', 'TOP 3 BATTING', 'TOP 3 BOWLING']):
+                st.markdown(f"### **{first_line}**")
+                if len(lines) > 1:
+                    process_highlights(lines[1:])
+                continue
+            
+            # Partnerships section (12-word limit)
+            if "PARTNERSHIPS THAT CHANGED EVERYTHING" in first_line or "🤝 PARTNERSHIPS THAT CHANGED EVERYTHING" in first_line:
+                st.markdown(f"### **{first_line}**")
+                if len(lines) > 1:
+                    process_partnerships(lines[1:])
+                continue
+            
+            # Fielding highlights section
+            if "FIELDING HIGHLIGHTS" in first_line or "🎯 FIELDING HIGHLIGHTS" in first_line:
+                st.markdown(f"### **{first_line}**")
+                if len(lines) > 1:
+                    process_fielding_highlights(lines[1:])
+                continue
+            
+            # Statistical facts (10-word limit)
+            if "FASCINATING STATISTICAL FACTS" in first_line or "📊 STATISTICAL DEEP DIVE" in first_line:
+                st.markdown(f"### **{first_line}**")
+                if len(lines) > 1:
+                    process_statistical_facts(lines[1:])
+                continue
+            
+            # Other sections
+            if first_line and not first_line.startswith('-'):
+                st.markdown(f"### **{first_line}**")
+                if len(lines) > 1:
+                    for line in lines[1:]:
+                        if line.strip():
+                            st.markdown(line.strip())
+
+def process_section_content(lines, section_title):
+    """Process content under major sections"""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('- **'):
+            # Bullet points with bold headers
+            st.markdown(line)
+        elif line.startswith('**') and line.endswith('**'):
+            # Bold subheadings
+            st.markdown(f"#### {line}")
+        else:
+            st.markdown(line)
+
+def process_highlights(lines):
+    """Process top highlights/performances with 10-word limit"""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line[0].isdigit() and '.' in line[:5]:
+            # Extract title and description
+            parts = line.split(':', 1)
+            if len(parts) == 2:
+                title = parts[0].strip()
+                description = parts[1].strip()
+                
+                # Limit description to 10 words
+                words = description.split()
+                if len(words) > 10:
+                    description = ' '.join(words[:10]) + '...'
+                
+                # Use container for better styling
+                with st.container():
+                    st.markdown(f"""
+                    <div class="highlight-card">
+                        <strong>{title}:</strong> {description}
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"**{line}**")
+        else:
+            st.markdown(line)
+
+def process_partnerships(lines):
+    """Process partnerships section with 12-word limit"""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('- '):
+            # Extract title and description
+            line_content = line[2:]  # Remove "- "
+            parts = line_content.split(' - ', 1)
+            if len(parts) == 2:
+                title = parts[0].strip()
+                description = parts[1].strip()
+                
+                # Limit description to 12 words
+                words = description.split()
+                if len(words) > 12:
+                    description = ' '.join(words[:12]) + '...'
+                
+                st.markdown(f"""
+                <div class="highlight-card">
+                    <strong>🤝 {title}:</strong> {description}
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"**{line_content}**")
+        else:
+            st.markdown(line)
+
+def process_fielding_highlights(lines):
+    """Process fielding highlights section"""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('- '):
+            # Extract title and description
+            line_content = line[2:]  # Remove "- "
+            parts = line_content.split(' - ', 1)
+            if len(parts) == 2:
+                title = parts[0].strip()
+                description = parts[1].strip()
+                
+                # Limit description to 10 words for consistency
+                words = description.split()
+                if len(words) > 10:
+                    description = ' '.join(words[:10]) + '...'
+                
+                st.markdown(f"""
+                <div class="highlight-card">
+                    <strong>🎯 {title}:</strong> {description}
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"**{line_content}**")
+        else:
+            st.markdown(line)
+
+def process_statistical_facts(lines):
+    """Process statistical facts section with 10-word limit"""
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith('- '):
+            # Extract title and description
+            line_content = line[2:]  # Remove "- "
+            parts = line_content.split(' - ', 1)
+            if len(parts) == 2:
+                title = parts[0].strip()
+                description = parts[1].strip()
+                
+                # Limit description to 10 words
+                words = description.split()
+                if len(words) > 10:
+                    description = ' '.join(words[:10]) + '...'
+                
+                st.markdown(f"""
+                <div class="stats-container">
+                    <strong>📊 {title}:</strong><br>
+                    {description}
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"**{line_content}**")
+        elif line[0].isdigit() and '.' in line[:5]:
+            parts = line.split(':', 1)
+            if len(parts) == 2:
+                title = parts[0].strip()
+                description = parts[1].strip()
+                
+                # Limit description to 10 words
+                words = description.split()
+                if len(words) > 10:
+                    description = ' '.join(words[:10]) + '...'
+                
+                st.markdown(f"""
+                <div class="stats-container">
+                    <strong>📊 {title}:</strong><br>
+                    {description}
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"**{line}**")
+        else:
+            st.markdown(line)
+
+# Configure Streamlit page
+st.set_page_config(
+    page_title="Cricket Match Analysis",
+    page_icon="🏏",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+def main():
+    st.title("🏏 Cricket Match Analysis with CrewAI")
+    st.markdown("---")
+    
+    # Add custom CSS for better styling
+    st.markdown("""
+    <style>
+    .stApp {
+        padding-top: 2rem;
+    }
+    .main-header {
+        font-size: 3rem !important;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .section-header {
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+        margin: 1.5rem 0 1rem 0;
+    }
+    .highlight-card {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #4ecdc4;
+        margin: 0.5rem 0;
+    }
+    .stats-container {
+        background-color: #fff5f5;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Sidebar for inputs
+    with st.sidebar:
+        st.header("⚙️ Configuration")
+        
+        # Match ID input
+        match_id = st.text_input(
+            "Match ID",
+            value="105778",
+            help="Enter the cricket match ID you want to analyze"
+        )
+        
+        # Analysis button
+        analyze_button = st.button("🚀 Start Analysis", type="primary")
+        
+        st.markdown("---")
+        st.markdown("### ℹ️ About")
+        st.markdown(
+            """
+            This app uses CrewAI to analyze cricket matches with:
+            - **Summary Writer**: Gets match results
+            - **Mega Analyst**: Extracts highlights  
+            - **Viral Master**: Creates engaging content
+            - **Ultimate Digest Master**: Compiles final report
+            """
+        )
+    
+    # Main content area - full width
+    if analyze_button and match_id:
+        if not match_id.strip():
+            st.error("Please enter a valid Match ID")
+            return
+        
+        # Show loading spinner
+        with st.spinner("🔄 Analyzing match data..."):
+            try:
+                # Run the CrewAI analysis
+                result = run(match_id)
+                
+                # Display results
+                if result:
+                    # Get the result text
+                    if hasattr(result, 'raw'):
+                        result_text = result.raw
+                    else:
+                        result_text = str(result)
+                    
+                    # Format and display the cricket analysis
+                    format_cricket_analysis(result_text)
+                    
+                    # Download button for results
+                    st.download_button(
+                        label="📥 Download Report",
+                        data=result_text,
+                        file_name=f"cricket_analysis_{match_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                        mime="text/plain"
+                    )
+                
+            except Exception as e:
+                st.error(f"An error occurred during analysis: {str(e)}")
+                
+                with st.expander("🔍 Error Details"):
+                    st.code(traceback.format_exc())
+                
+                logger.error(f"Analysis failed for match {match_id}: {str(e)}")
+    
+    elif not match_id:
+        st.info("👈 Please enter a Match ID in the sidebar to start analysis")
+    else:
+        st.info("👆 Click the 'Start Analysis' button to begin")
+
+if __name__ == "__main__":
+    main()
